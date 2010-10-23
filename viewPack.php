@@ -5,9 +5,16 @@ $pick=$_GET['pick'];
 $packFrom=$_GET['pack'];
 $packOrder=$_GET['packorder'];
 $view="pack";
+$PackOn=$_SESSION["draft"]["packOn"];
+$turnOn=$_SESSION["draft"]["turn"];
 if( $pick != "na")
 {
-	$_SESSION["draft"]["mypack"]=$_SESSION["draft"][$packFrom][$packOrder];
+	$mypackNumb=count($_SESSION["draft"]["mypack"]);
+	if($turnOn==2)
+	{
+		$mypackNumb--;
+	}
+	$_SESSION["draft"]["mypack"][$mypackNumb]=$_SESSION["draft"][$packFrom][$packOrder];
 	$_SESSION["draft"][$packFrom][$packOrder]["inUse"]=1;
 }
 if($_SESSION["draft"]["turn"] >=15)
@@ -34,7 +41,7 @@ else
 	{
 		$tempPack;
 		$poSt=0; //Positon in $tempPack
-		for($i=0; $i <count($packOn); $i++)
+		for($i=0; $i < 14; $i++)
 		{
 			if( $packOn[$i]["inUse"] == 0)
 			{
@@ -119,8 +126,7 @@ else
 	
 	/* end of AI */
 	
-	$PackOn=$_SESSION["draft"]["packOn"];
-	$turnOn=$_SESSION["draft"]["turn"];
+	
 	for($i=1; $i<=8; $i++)
 	{
 		if($i != $PackOn)
@@ -171,12 +177,12 @@ if($view == "pack")
 if($view == "hand")
 {
 	$j = 0;
-	for($i; $i < 14; $i++)
+	for($i=0 ; $i<14;$i ++)
 	{
 		$card= $_SESSION["draft"]["mypack"][$i]["cardNum"].".jpg";
 		echo '<li><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></li>';
 		$j++;
-		if($j== 6)
+		if($j == 6)
 		  {
 			  echo "<br />";
 			  $j=0;

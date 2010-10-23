@@ -273,7 +273,7 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
 	$pack6=fillPack();
 	$pack7=fillPack();
 	$pack8=fillPack();
- $mypack[0]=0;
+ $mypack[0]=NULL;
  $c1pack[0]=0;
  $c2pack[0]=0;
  $c3pack[0]=0;
