@@ -7,110 +7,126 @@ $packOrder=$_GET['packorder'];
 if( $pick != "na")
 {
 	$_SESSION["draft"]["mypack"]=$_SESSION["draft"][$packFrom][$packOrder];
-	$_SESSION["draft"][$packFrom][$packOrder]="USED";
+	$_SESSION["draft"][$packFrom][$packOrder]["inUse"]=1;
 }
-
-/*AI using recursive functions 
-	V 0.1 
-	Notes-
-	attemp 1. after testing if works promted as v1.0
-*/
-function AI($packOn , $turn)//sorts our the used and unused cards
+if($_SESSION["draft"]["turn"] >=15)
 {
-	$tempPack;
-	$poSt=0; //Positon in $tempPack
-	for($i=0; $i <count($packOn); $i++)
+	$_SESSION["draft"]["round"]++;
+	$_SESSION["draft"]["turn"]=1;
+}
+else
+{
+	/*AI using recursive functions 
+		V 1.0
+		Functions
+			1)AI - sorts out the used and unused cards
+			2)AIRecur - first sort. if a zero size is returned here run again. if size > 1 send to AIMakSmR 
+			3)AIMakSmR - shrinks the list down. If zero size for new list push old list to AIfinRec
+			4)AIfinRec - only runs once. randomly selects card. 
+		Notes-
+		v1.0 only takes in pick from card
+		inprogress v1.1 - optimization. 
+		inprogress v2.0 - takes in color for pick. 
+	*/
+	function AI($packOn , $turn)//sorts our the used and unused cards
 	{
-		if( $packOn[$i]["inUse"] == 0)
+		$tempPack;
+		$poSt=0; //Positon in $tempPack
+		for($i=0; $i <count($packOn); $i++)
 		{
-			echo "Ran ";
-		$tempPack[$poSt] = $packOn[$i];
-		$poSt++;
+			if( $packOn[$i]["inUse"] == 0)
+			{
+			$tempPack[$poSt] = $packOn[$i];
+			$poSt++;
+			}
+			
 		}
-		echo $i;
 		
+		return AIRecur($tempPack, $turn);
+	}
+	function AIRecur($packOn, $turn)// narrows the cards down.
+	{
+		$tempCard;
+		$tempPack;
+		$poSt=0; //Positon in $tempPack
+		
+		for($i=0; $i <count($packOn,  COUNT_NORMAL); $i++)
+		{
+			if($packOn[$i]["pick"] <= $turn)
+			{
+				$tempPack[$poSt]=$packOn[$i];
+				$poSt++;
+			}
+		}
+		if(count($tempPack) == 0) // if zero cards in $tempPack then retry with orginal pack plus a higher turn count.
+		{
+			return AIRecur($packOn, $turn +=1);
+		}
+		else if( count($tempPack) > 1)// if more than one card send to AIMakeSmR to try and decresse that number
+		{
+			return AIMakSmR($tempPack, $turn -=1);
+		}
+		else
+		{
+			return AIfinRec($tempPack, $turn);
+			
+		}
+	}
+	function AIMakSmR($packOn, $turn)// Makes the pack list smaller. Once it runs through this function it will never run through AIRecur
+	{
+		$tempCard;
+		$tempPack;
+		$poSt=0; //Positon in $tempPack
+		
+		for($i=0; $i <count($packOn,  COUNT_NORMAL); $i++)
+		{
+			if($packOn[$i]["pick"] <= $turn)
+			{
+				$tempPack[$poSt]=$packOn[$i];
+				$poSt++;
+			}
+		}
+		if($poSt = 1)
+		{
+			return AIfinRec($packOn, $turn);
+		}
+		else if( count($tempPack) > 1)// if $tempPack is larger than one try it again with a smaller $turn.
+		{
+			return AIMakSmR($tempPack, $turn -=1);
+		}
+		else // must be one card so hand it off to AIfinRec
+		{
+			return AIfinRec($tempPack, $turn);
+			
+		}
+	}	
+	function AIfinRec($packOn, $turn)// final function. only runs once and will return a value. 
+	{
+		if(count($packOn) == 1)
+		{
+			return $packOn[0]["packp"];
+		}
+		else
+		{
+			$tempRan=rand(0,(count($packOn)-1)); //randomly picks a card in the pack. 
+			$temp=$packOn[$tempRan]["packp"];
+			return $temp;
+		}
 	}
 	
-	return AIRecur($tempPack, $turn);
-}
-function AIRecur($packOn, $turn)// narrows the cards down.
-{
-	$tempCard;
-	$tempPack;
-	$poSt=0; //Positon in $tempPack
 	
-	for($i=0; $i <count($packOn,  COUNT_NORMAL); $i++)
+	/* end of AI */
+	
+	$PackOn=$_SESSION["draft"]["packOn"];
+	$turnOn=$_SESSION["draft"]["turn"];
+	for($i=1; $i<=8; $i++)
 	{
-		if($packOn[$i]["pick"] <= $turn)
+		if($i != $PackOn)
 		{
-			$tempPack[$poSt]=$packOn[$i];
-			$poSt++;
+			$tempPack=$_SESSION["draft"]["p".$i];
+			$Pick=AI($tempPack, $turnOn);
+			$_SESSION["draft"]["p".$i][$Pick]["inUse"] = 1;
 		}
-	}
-	if(count($tempPack) == 0) // if zero cards in $tempPack then retry with orginal pack plus a higher turn count.
-	{
-		return AIRecur($packOn, $turn +=1);
-	}
-	else if( count($tempPack) > 1)// if more than one card send to AIMakeSmR to try and decresse that number
-	{
-		return AIMakSmR($tempPack, $turn -=1);
-	}
-	else
-	{
-		return AIfinRec($tempPack, $turn);
-		
-	}
-}
-function AIMakSmR($packOn, $turn)// Makes the pack list smaller. Once it runs through this function it will never run through AIRecur
-{
-	$tempCard;
-	$tempPack;
-	$poSt=0; //Positon in $tempPack
-	for($i=0; $i<count($packOn); $i++)
-	{
-		if($packOn[$i]["pick"] <= $turn)
-		{
-			$tempPack[$poSt]=$packOn[$i];
-			$poSt++;
-		}
-	}
-	if(count($tempPack) < 1)
-	{
-		return AIfinRec($packOn, $turn);
-	}
-	else if( count($tempPack) > 1)// if $tempPack is larger than one try it again with a smaller $turn.
-	{
-		return AIMakSmR($tempPack, $turn -=1);
-	}
-	else // must be one card so hand it off to AIfinRec
-	{
-		return AIfinRec($tempPack, $turn);
-		
-	}
-}	
-function AIfinRec($packOn, $turn)// final function. only runs once and will return a value. 
-{
-	if(count($packOn) == 1)
-	{
-		return $packOn[0]["packp"];
-	}
-	else
-	{
-		$tempRan=rand(0,(count($packOn)-1)); //randomly picks a card in the pack. 
-		$temp=$packOn[$tempRan]["packp"];
-		return $temp;
-	}
-}
-
-$PackOn=$_SESSION["draft"]["packOn"];
-$turnOn=$_SESSION["draft"]["turn"];
-for($i=1; $i<=8; $i++)
-{
-	if($i != $PackOn)
-	{
-		$tempPack=$_SESSION["draft"]["p".$i];
-		$Pick=AI($tempPack, $turnOn);
-		$_SESSION["draft"]["p".$i][$Pick]["inUse"] = 1;
 	}
 }
 ?>
@@ -125,6 +141,7 @@ for($i=1; $i<=8; $i++)
 <body>
 <ul class="cardwrap">
 <?php
+
 $pack = "p".$_SESSION["draft"]["packOn"];
 $j = 0;
 for($i=0 ; $i<count($_SESSION["draft"][$pack]); $i++)
@@ -134,7 +151,7 @@ for($i=0 ; $i<count($_SESSION["draft"][$pack]); $i++)
 	  $card= $_SESSION["draft"][$pack][$i]["cardNum"].".jpg";
 	  echo '<li><a href="viewPack.php?set='.$_GET['set'].'&packorder='.$i.'&pick='.$_SESSION["draft"][$pack][$i]["cardNum"].'&pack='.$pack.'"><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></a></li>';
 	  $j++;
-	  if($j== 7)
+	  if($j== 6)
 	  {
 		  echo "<br />";
 		  $j=0;
