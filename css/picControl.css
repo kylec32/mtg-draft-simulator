@@ -1,0 +1,48 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Image size non hover */
+
+.card
+{
+	
+	//width:132px;
+	//height:185px;
+	
+}
+
+.card:hover
+{
+	//float:left;
+	//height:370px;
+	//width:265px;
+	//z-index:1;
+}
+
+//uses CSS3, alternative needed.
+.cardwrap
+{
+	list-style-type:none
+	margin:0px;
+	padding:0px;
+}
+.cardwrap li
+{
+	display:inline;
+	width:190px;
+	height:210px;
+}
+.cardwrap li img
+{
+	width:169px;
+	height:235px;
+	margin-right:10px;
+	-webkit-transition:-webkit-transform 0.1s ease-in; 
+	-o-transition:-o-transform 0.1s ease-in;
+}
+.cardwrap li img:hover
+{
+	-moz-transform:scale(1.8); /*scale up image 1.8x*/
+	-webkit-transform:scale(1.8);
+	-o-transform:scale(1.8);
+}
