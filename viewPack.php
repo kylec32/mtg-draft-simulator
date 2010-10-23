@@ -4,6 +4,7 @@ session_start();
 $pick=$_GET['pick'];
 $packFrom=$_GET['pack'];
 $packOrder=$_GET['packorder'];
+$view="pack";
 if( $pick != "na")
 {
 	$_SESSION["draft"]["mypack"]=$_SESSION["draft"][$packFrom][$packOrder];
@@ -13,6 +14,7 @@ if($_SESSION["draft"]["turn"] >=15)
 {
 	$_SESSION["draft"]["round"]++;
 	$_SESSION["draft"]["turn"]=1;
+	$view = "hand";
 }
 else
 {
@@ -141,28 +143,45 @@ else
 <body>
 <ul class="cardwrap">
 <?php
-
-$pack = "p".$_SESSION["draft"]["packOn"];
-$j = 0;
-for($i=0 ; $i<count($_SESSION["draft"][$pack]); $i++)
-{	
-	if($_SESSION["draft"][$pack][$i]["inUse"] == 0)
+if($view == "pack")
+{
+	$pack = "p".$_SESSION["draft"]["packOn"];
+	$j = 0;
+	for($i=0 ; $i<14; $i++)
+	{	
+		if($_SESSION["draft"][$pack][$i]["inUse"] == 0)
+		{
+		  $card= $_SESSION["draft"][$pack][$i]["cardNum"].".jpg";
+		  echo '<li><a href="viewPack.php?set='.$_GET['set'].'&packorder='.$i.'&pick='.$_SESSION["draft"][$pack][$i]["cardNum"].'&pack='.$pack.'"><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></a></li>';
+		  $j++;
+		  if($j== 6)
+		  {
+			  echo "<br />";
+			  $j=0;
+		  }
+		}
+	}
+	$_SESSION["draft"]["packOn"]++;
+	$_SESSION["draft"]["turn"]++;
+	if($_SESSION["draft"]["packOn"]>8)
 	{
-	  $card= $_SESSION["draft"][$pack][$i]["cardNum"].".jpg";
-	  echo '<li><a href="viewPack.php?set='.$_GET['set'].'&packorder='.$i.'&pick='.$_SESSION["draft"][$pack][$i]["cardNum"].'&pack='.$pack.'"><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></a></li>';
-	  $j++;
-	  if($j== 6)
-	  {
-		  echo "<br />";
-		  $j=0;
-	  }
+		$_SESSION["draft"]["packOn"]=1;
 	}
 }
-$_SESSION["draft"]["packOn"]++;
-$_SESSION["draft"]["turn"]++;
-if($_SESSION["draft"]["packOn"]>8)
+if($view == "hand")
 {
-	$_SESSION["draft"]["packOn"]=1;
+	$j = 0;
+	for($i; $i < 14; $i++)
+	{
+		$card= $_SESSION["draft"]["mypack"][$i]["cardNum"].".jpg";
+		echo '<li><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></li>';
+		$j++;
+		if($j== 6)
+		  {
+			  echo "<br />";
+			  $j=0;
+		  }
+	}
 }
 ?>
 </ul>
