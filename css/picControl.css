@@ -3,22 +3,6 @@
 
 /*Image size non hover */
 
-.card
-{
-	
-	//width:132px;
-	//height:185px;
-	
-}
-
-.card:hover
-{
-	//float:left;
-	//height:370px;
-	//width:265px;
-	//z-index:1;
-}
-
 //uses CSS3, alternative needed.
 .cardwrap
 {
@@ -45,4 +29,7 @@
 	-moz-transform:scale(1.8); /*scale up image 1.8x*/
 	-webkit-transform:scale(1.8);
 	-o-transform:scale(1.8);
+	box-shadow:0px 0px 30px gray; /*CSS3 shadow: 30px blurred shadow all around image*/
+	-webkit-box-shadow:0px 0px 30px gray; /*Safari shadow version*/
+	-moz-box-shadow:0px 0px 30px gray; /*Mozilla shadow version*/
 }
