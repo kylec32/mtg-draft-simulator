@@ -6,8 +6,14 @@ if(isset($_SESSION['draft']))
 session_start();
 $fname=$_GET["fname"];
 $lname=$_GET["lname"];
+
+	include('connect.php');
+	db_connect();
+	$data=mysql_query("select * from $set");
+
 function fillPack()
 	{
+		
 		$set=$_GET["set"];
 		$cStart=1;
 		$cEnd=0;
