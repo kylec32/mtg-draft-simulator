@@ -8,13 +8,14 @@ $fname=$_GET["fname"];
 $lname=$_GET["lname"];
 function fillPack()
 	{
-		
-		include('connect.php');
-		db_connect();
-		$data=mysql_query("select * from $set");
-		
 		$set=$_GET["set"];
 		$cStart=1;
+		$cEnd=0;
+		$unStart=0;
+		$unEnd=0;
+		$rStart=0;
+		$rEnd=0;
+		
 		
 
 	if($set == "M11" || $set == "m11")
@@ -33,7 +34,6 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
 			$tempVar=rand($cStart, $cEnd);
 			if(!array_search($tempVar, $used))
 			{
-				
 				$tempCar["cardName"]=mysql_result($data, $tempVar, "cardName");
 				
 				$tempCar["pick"]=mysql_result($data, $tempVar, "pick");
@@ -98,7 +98,6 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
 				$tempCar["packp"]=$i;
 				$used[$i]=$tempVar;
 				$pack[$i]=$tempCar;
-			
 			}
 			else
 			{
@@ -117,17 +116,17 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
 	$pack6=fillPack();
 	$pack7=fillPack();
 	$pack8=fillPack();
- 	$mypack[0]=NULL;
- 	$c1pack[0]=0;
- 	$c2pack[0]=0;
- 	$c3pack[0]=0;
- 	$c4pack[0]=0;
- 	$c5pack[0]=0;
- 	$c6pack[0]=0;
- 	$c7pack[0]=0;
+ $mypack[0]=NULL;
+ $c1pack[0]=0;
+ $c2pack[0]=0;
+ $c3pack[0]=0;
+ $c4pack[0]=0;
+ $c5pack[0]=0;
+ $c6pack[0]=0;
+ $c7pack[0]=0;
 
 $Fullname =$fname.$lname;
 $_SESSION['draft']= array("name" =>$Fullname, "turn"=>1, "round" => 1, "packOn"=>1, "mypack" => $mypack, "cp1" => $c1pack, "cp2" => $c2pack, "cp3" =>$c3pack, "cp4" => $c4pack, "cp5" => $c5pack, "cp6" => $c6pack, "cp7" => $c7pack, "p1" => $pack1, "p2" => $pack2,"p3" => $pack3,"p4" => $pack4,"p5" => $pack5,"p6" => $pack6,"p7" => $pack7,"p8" => $pack8 );
-?>
-<html><head><title>Are you ready?</title></head><body><h2 align="center"><a href="viewPack.php?set=m11&packorder=na&pick=na&pack=na">Click Here when you are ready to start</a></h2></body></html>
 
+echo('<html><head><title>Are you ready?</title></head><body><h2 align="center"><a href="viewPack.php?set=m11&packorder=na&pick=na&pack=na">Click Here when you are ready to start</a></h2></body></html>');
+?>
