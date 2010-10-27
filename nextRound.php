@@ -1,20 +1,15 @@
 <?php
-if(isset($_SESSION['draft']))
-{
-	unset($_SESSION['draft']);
-}
+
 session_start();
-$fname=$_GET["fname"];
-$lname=$_GET["lname"];
-$set=$_GET["set"];
+
+	$set=$_SESSION["draft"]["set"];
 	include('connect.php');
 	db_connect();
 	$data=mysql_query("select * from $set");
 
 function fillPack()
 	{
-		
-		$set=$_GET["set"];
+		$set=$_SESSION["draft"]["set"];
 		$data=mysql_query("select * from $set");
 		$cStart=1;
 		$cEnd=0;
@@ -123,7 +118,6 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
 	$pack6=fillPack();
 	$pack7=fillPack();
 	$pack8=fillPack();
- $mypack[0]=NULL;
  $c1pack[0]=0;
  $c2pack[0]=0;
  $c3pack[0]=0;
@@ -132,8 +126,53 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
  $c6pack[0]=0;
  $c7pack[0]=0;
 
-$Fullname =$fname.$lname;
-$_SESSION['draft']= array("name" =>$Fullname, "set" =>$set, "turn"=>1, "round" => 1, "packOn"=>1, "mypack" => $mypack, "cp1" => $c1pack, "cp2" => $c2pack, "cp3" =>$c3pack, "cp4" => $c4pack, "cp5" => $c5pack, "cp6" => $c6pack, "cp7" => $c7pack, "p1" => $pack1, "p2" => $pack2,"p3" => $pack3,"p4" => $pack4,"p5" => $pack5,"p6" => $pack6,"p7" => $pack7,"p8" => $pack8 );
-
-echo('<html><head><title>Are you ready?</title></head><body><h2 align="center"><a href="viewPack.php?set=m11&packorder=na&pick=na&pack=na">Click Here when you are ready to start</a></h2></body></html>');
+$_SESSION['draft']["turn"]=1;
+$_SESSION['draft']["round"]++;
+$_SESSION['draft']["packOn"]=1;
+/*
+$_SESSION['draft']["cp1"] = $c1pack; 
+$_SESSION['draft']["cp2"] = $c2pack;
+$_SESSION['draft']["cp3"] = $c3pack;
+$_SESSION['draft']["cp4"] = $c4pack;
+$_SESSION['draft']["cp5"] = $c5pack;
+$_SESSION['draft']["cp6"] = $c6pack;
+$_SESSION['draft']["cp7"] = $c7pack;
+*/
+$_SESSION['draft']["p1"] = $pack1;
+$_SESSION['draft']["p2"] = $pack2;
+$_SESSION['draft']["p3"] = $pack3;
+$_SESSION['draft']["p4"] = $pack4;
+$_SESSION['draft']["p5"] = $pack5;
+$_SESSION['draft']["p6"] = $pack6;
+$_SESSION['draft']["p7"] = $pack7;
+$_SESSION['draft']["p8"] = $pack8;
+echo ('
+<html><head><title>Are you ready?</title></head>
+<link rel="stylesheet" type="text/css" href="css/picControl.css" />
+<body>
+	<h2 align="center">');
+if($_SESSION['draft']["round"]<=3)
+{
+		echo('<a href="viewPack.php?set=m11&packorder=na&pick=na&pack=na">Next Round</a>');
+}
+echo $_SESSION['draft']["round"]; 
+echo('</h2>
+	<ul class="cardwrap">');
+             $j = 0;
+			 $count = count($_SESSION["draft"]["mypack"]);
+            for($i=0 ; $i<$count;$i ++)
+            {
+                $card= $_SESSION["draft"]["mypack"][$i]["cardNum"].".jpg";
+                echo '<li><img class="card" src=images/'.$set.'/'.$card.' onmouseover="width=\'200px\'" "></li>';
+                $j++;
+                if($j == 6)
+                  {
+                      echo "<br />";
+                      $j=0;
+                  }
+            }
+        
+	echo ('</ul>
+</body>
+</html>');
 ?>

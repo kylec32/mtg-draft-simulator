@@ -19,8 +19,6 @@ if( $pick != "na")
 }
 if($_SESSION["draft"]["turn"] >=15)
 {
-	$_SESSION["draft"]["round"]++;
-	$_SESSION["draft"]["turn"]=1;
 	$view = "hand";
 }
 else
@@ -67,11 +65,11 @@ else
 				$poSt++;
 			}
 		}
-		if(count($tempPack) == 0) // if zero cards in $tempPack then retry with orginal pack plus a higher turn count.
+		if($poSt == 0) // if zero cards in $tempPack then retry with orginal pack plus a higher turn count.
 		{
 			return AIRecur($packOn, $turn +=1);
 		}
-		else if( count($tempPack) > 1)// if more than one card send to AIMakeSmR to try and decresse that number
+		else if($poSt > 1)// if more than one card send to AIMakeSmR to try and decresse that number
 		{
 			return AIMakSmR($tempPack, $turn -=1);
 		}
@@ -176,18 +174,8 @@ if($view == "pack")
 }
 if($view == "hand")
 {
-	$j = 0;
-	for($i=0 ; $i<14;$i ++)
-	{
-		$card= $_SESSION["draft"]["mypack"][$i]["cardNum"].".jpg";
-		echo '<li><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></li>';
-		$j++;
-		if($j == 6)
-		  {
-			  echo "<br />";
-			  $j=0;
-		  }
-	}
+	
+	echo "<a href='nextRound.php'>View your hand</a>";
 }
 ?>
 </ul>
