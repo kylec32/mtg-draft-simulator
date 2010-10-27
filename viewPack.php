@@ -56,8 +56,8 @@ else
 		$tempCard;
 		$tempPack;
 		$poSt=0; //Positon in $tempPack
-		
-		for($i=0; $i <count($packOn,  COUNT_NORMAL); $i++)
+		$count=count($packOn,  COUNT_NORMAL);
+		for($i=0; $i <$count; $i++)
 		{
 			if($packOn[$i]["pick"] <= $turn)
 			{
