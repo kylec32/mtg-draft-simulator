@@ -156,7 +156,7 @@ if($view == "pack")
 		if($_SESSION["draft"][$pack][$i]["inUse"] == 0)
 		{
 		  $card= $_SESSION["draft"][$pack][$i]["cardNum"].".jpg";
-		  echo '<li><a href="viewPack.php?set='.$_GET['set'].'&packorder='.$i.'&pick='.$_SESSION["draft"][$pack][$i]["cardNum"].'&pack='.$pack.'"><img class="card" src=images/'.$_GET['set'].'/'.$card.' onmouseover="width=\'200px\'" "></a></li>';
+		  echo '<li><a href="viewPack.php?set=',$_GET['set'],'&packorder=',$i,'&pick=',$_SESSION["draft"][$pack][$i]["cardNum"],'&pack=',$pack,'"><img class="card" src=images/',$_GET['set'],'/',$card,'></a></li>';
 		  $j++;
 		  if($j== 6)
 		  {
