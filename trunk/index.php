@@ -10,7 +10,7 @@
     Last Name:<input type="text" name="lname" /><br />
     <select name="set">
     	<option value="M11">M11</option>
-        <option value="None">none</option>
+        <option value=""></option>
      </select>
     <input type="submit" value="DRAFT!!" />
 </form>
