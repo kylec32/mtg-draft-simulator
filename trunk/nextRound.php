@@ -5,7 +5,6 @@ session_start();
 	$set=$_SESSION["draft"]["set"];
 	include('connect.php');
 	db_connect();
-	$data=mysql_query("select * from $set");
 
 function fillPack()
 	{
@@ -118,13 +117,13 @@ $tempCar=array("cardName"=>NULL,"cardNum"=>0, "pick"=>0, "color"=>"NA", "rarity"
 	$pack6=fillPack();
 	$pack7=fillPack();
 	$pack8=fillPack();
- $c1pack[0]=0;
- $c2pack[0]=0;
- $c3pack[0]=0;
- $c4pack[0]=0;
- $c5pack[0]=0;
- $c6pack[0]=0;
- $c7pack[0]=0;
+ 	$c1pack[0]=0;
+ 	$c2pack[0]=0;
+ 	$c3pack[0]=0;
+ 	$c4pack[0]=0;
+ 	$c5pack[0]=0;
+ 	$c6pack[0]=0;
+ 	$c7pack[0]=0;
 
 $_SESSION['draft']["turn"]=1;
 $_SESSION['draft']["round"]++;
@@ -147,23 +146,22 @@ $_SESSION['draft']["p6"] = $pack6;
 $_SESSION['draft']["p7"] = $pack7;
 $_SESSION['draft']["p8"] = $pack8;
 echo ('
-<html><head><title>Are you ready?</title></head>
+<html><head><title>View Hand</title></head>
 <link rel="stylesheet" type="text/css" href="css/picControl.css" />
 <body>
 	<h2 align="center">');
 if($_SESSION['draft']["round"]<=3)
 {
-		echo('<a href="viewPack.php?set=m11&packorder=na&pick=na&pack=na">Next Round</a>');
+		echo('<a href="viewPack.php?set=m11&packorder=na&pick=na&pack=na">Next Round - ');
 }
-echo $_SESSION['draft']["round"]; 
-echo('</h2>
-	<ul class="cardwrap">');
+echo $_SESSION['draft']["round"],'</a>'; 
+echo('</h2><ul class="cardwrap">');
              $j = 0;
 			 $count = count($_SESSION["draft"]["mypack"]);
             for($i=0 ; $i<$count;$i ++)
             {
                 $card= $_SESSION["draft"]["mypack"][$i]["cardNum"].".jpg";
-                echo '<li><img class="card" src=images/'.$set.'/'.$card.' onmouseover="width=\'200px\'" "></li>';
+                echo '<li><img class="card" src=images/'.$set.'/'.$card.'  "></li>';
                 $j++;
                 if($j == 6)
                   {

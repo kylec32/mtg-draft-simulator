@@ -1,12 +1,15 @@
 <?php
-
 session_start();
+
+
+
 $pick=$_GET['pick'];
 $packFrom=$_GET['pack'];
 $packOrder=$_GET['packorder'];
 $view="pack";
 $PackOn=$_SESSION["draft"]["packOn"];
 $turnOn=$_SESSION["draft"]["turn"];
+
 if( $pick != "na")
 {
 	$mypackNumb=count($_SESSION["draft"]["mypack"]);
@@ -17,7 +20,7 @@ if( $pick != "na")
 	$_SESSION["draft"]["mypack"][$mypackNumb]=$_SESSION["draft"][$packFrom][$packOrder];
 	$_SESSION["draft"][$packFrom][$packOrder]["inUse"]=1;
 }
-if($_SESSION["draft"]["turn"] >=15)
+if($turnOn >=15)
 {
 	$view = "hand";
 }
@@ -149,7 +152,7 @@ else
 <?php
 if($view == "pack")
 {
-	$pack = "p".$_SESSION["draft"]["packOn"];
+	$pack = "p".$PackOn;
 	$j = 0;
 	for($i=0 ; $i<14; $i++)
 	{	
@@ -167,15 +170,16 @@ if($view == "pack")
 	}
 	$_SESSION["draft"]["packOn"]++;
 	$_SESSION["draft"]["turn"]++;
-	if($_SESSION["draft"]["packOn"]>8)
+	if($PackOn>=8)
 	{
 		$_SESSION["draft"]["packOn"]=1;
 	}
+	
 }
 if($view == "hand")
 {
 	
-	echo "<a href='nextRound.php'>View your hand</a>";
+	echo '<a href="nextRound.php">View your hand</a>';
 }
 ?>
 </ul>
