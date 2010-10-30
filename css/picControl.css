@@ -23,6 +23,7 @@
 	margin-right:10px;
 	-webkit-transition:-webkit-transform 0.1s ease-in; 
 	-o-transition:-o-transform 0.1s ease-in;
+	border:none;
 }
 .cardwrap li img:hover
 {
