@@ -1,0 +1,1 @@
+PHP web-based Magic: The Gathering draft simulator with AI to compete against.  It allows a user to refine the skills of drafting.
